@@ -1,37 +1,91 @@
 class VoyagesController < ApplicationController
 
-  # GET: /voyages
   get "/voyages" do
-    erb :"/voyages/index.html"
+		if logged_in? 
+			@sailor = current_user
+			@voyages = Voyage.all
+			erb :"/voyages/index.html"
+		else
+			redirect "/"
+		end
   end
 
-  # GET: /voyages/new
   get "/voyages/new" do
-    erb :"/voyages/new.html"
+		if logged_in?
+			@sailor = current_user
+			@boats = Boat.all
+			erb :"/voyages/new.html"
+		else
+			redirect "/"
+		end
   end
 
-  # POST: /voyages
   post "/voyages" do
-    redirect "/voyages"
+	
+    if !logged_in?
+      redirect "/"
+    else
+      voy_ = Voyage.new(params)
+			voy_.skipper = current_user
+			voy_.save
+      redirect "/voyages"
+    end
   end
 
-  # GET: /voyages/5
   get "/voyages/:id" do
-    erb :"/voyages/show.html"
+		@voyage = Voyage.find_by_id(params[:id])
+		if logged_in? && @voyage
+			erb :"/voyages/show.html"
+		else
+			redirect "/"
+		end
   end
 
-  # GET: /voyages/5/edit
   get "/voyages/:id/edit" do
-    erb :"/voyages/edit.html"
+		@voyage = Voyage.find_by_id(params[:id])
+		@boats = Boat.all
+
+		if logged_in? && @voyage && @boats && current_user == @voyage.skipper
+			erb :"/voyages/edit.html"
+		elsif !(logged_in? && current_user == @voyage.skipper)
+			@message = "The logged in user must be the voyage skipper to modify a voyage."
+			@voyages = Voyage.all
+			erb :'/voyages/index.html'
+		else
+			redirect "/"
+		end
   end
 
-  # PATCH: /voyages/5
   patch "/voyages/:id" do
-    redirect "/voyages/:id"
+    par_ = params[:voyage]
+		skipper_id_ = current_user.id if logged_in? #the logged in user must be the voyage skipper
+		@voyage =  Voyage.find_by_id(params[:id]) 
+		skipper = @voyage.skipper if @voyage
+
+		if logged_in? && @voyage && skipper && skipper.id == skipper_id_
+			@voyage.update(par_)
+			redirect "/voyages/#{@voyage.id}"
+		elsif skipper.id != skipper_id_
+			@message = "The logged in user must be the voyage skipper." 
+			erb :'/voyages/index.html'
+		else
+			redirect "/voyages"
+		end
   end
 
-  # DELETE: /voyages/5/delete
   delete "/voyages/:id/delete" do
-    redirect "/voyages"
+		skipper_id_ = current_user.id if logged_in? #the logged in user must be the voyage skipper
+		@voyage =  Voyage.find_by_id(params[:id]) 
+		skipper = @voyage.skipper if @voyage
+		
+		if logged_in? && @voyage && skipper && skipper.id == skipper_id_
+			@voyage.delete
+			redirect "/voyages"
+		elsif skipper.id != skipper_id_
+			@message = "The logged in user must be the voyage skipper." 
+			erb :'/voyages/index.html'
+		else
+			redirect "/voyages"
+		end
   end
 end

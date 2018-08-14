@@ -1,1 +1,26 @@
-<h1>This is the show page for an individual instance of your model.</h1>
+<h1>Voyage Details</h1>
+
+<% if @voyage.start_time %>
+	<% start_time_ = @voyage.start_time.strftime("%m/%d/%y %I:%M%p") %>
+<% else %>
+	<% start_time_ = "" %>
+<% end %>
+
+<% if @voyage.end_time %>
+	<% end_time_ = @voyage.end_time.strftime("%m/%d/%y %I:%M%p") %>
+<% else %>
+	<% end_time_ = "" %>
+<% end %>
+
+<br></br>
+<p>
+Skipper: "<%= @voyage.skipper.username %>" <br></br>
+Boat Number: <%= @voyage.boat.number %> <br></br>
+Boat Name: <%= @voyage.boat.name %> <br></br>
+Crew: <%= @voyage.crew %><br></br>
+Start Time: <%= start_time_ %><br></br>
+End Time: <%= end_time_ %><br></br>
+Initial Condition: <%= @voyage.initial_condition %><br></br>
+Return Condition: <%= @voyage.return_condition %>
+</p>
+<a href="/voyages/<%= @voyage.id %>/edit">Edit / Delete</a>

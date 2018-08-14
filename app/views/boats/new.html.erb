@@ -1,1 +1,14 @@
-<h1>Insert the form to create a new instance of your model.</h1>
+<h1>Record a New Boat</h1>
+<% if @message %>
+	<h2><%= @message %></h2>
+<% end %>
+
+<form method="POST" action="/boats">
+	<label for="number">Boat Number: </label><input id="number" type="text" name="number" required><br></br>
+	<label for="boat_name">Boat Name: </label><input id="name" type="text" name="name" required><br></br>
+	<label for="manufacturer">Manufacturer: </label><input id="manufacturer" type="text" name="manufacturer" required><br></br>
+	<label for="model">Model: </label><input id="model" type="text" name="model"><br></br>
+	<label for="year">Year: </label><input id="year" type="text" name="year"><br></br>
+	<label for="in_service">In Service: </label><input id="in_service" type="checkbox" name="in_service" checked><br></br>
+	<input id="submit" type="submit" value="Submit">	
+</form>

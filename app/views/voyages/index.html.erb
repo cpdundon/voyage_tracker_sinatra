@@ -1,1 +1,15 @@
-<h1>This is the Model's index page.</h1>
+<h1>Voyage List - Click on Your Voyage to View / Edit.</h1>
+<% if @message %>
+  <h2><%= @message %></h2>
+<% end %>
+
+<% @voyages.each do |voyage| %>	
+	<% if voyage.start_time %>
+		<% start_time_ = voyage.start_time.strftime("%m/%d/%Y %I:%M%p") %>
+	<% else %>
+		<% start_time_ = "N/A" %>
+	<% end %>
+
+	<p><a href="/voyages/<%= voyage.id %>">View</a> | <a href="/voyages/<%= voyage.id %>/edit">Edit</a> :: Skipper: "<%= voyage.skipper.username %>" - Start Time: <%= start_time_ %> - Boat Number: <%= voyage.boat.number %> - Boat Name: <%= voyage.boat.name %></p>
+<% end %>
+

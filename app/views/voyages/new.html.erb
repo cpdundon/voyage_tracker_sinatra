@@ -1,1 +1,24 @@
-<h1>Insert the form to create a new instance of your model.</h1>
+<h1>Record a New Voyage</h1>
+<% if @message %>
+  <h2><%= @message %></h2>
+<% end %>
+
+<form method="POST" action="/voyages">
+	<label>Skipper: "<%= @sailor.username %>"</label><br></br>
+  <label for="crew">Crew: </label><input id="crew" type="text" name="crew"><br></br>
+  <label for="start_time">Start Time: </label><input id="start_time" type="datetime-local" name="start_time"><br></br>
+  <label for="end_time">End Time: </label><input id="end_time" type="datetime-local" name="end_time"><br></br>
+  <label for="initial_condition">Initial Condition: </label><input id="initial_condition" type="text" name="initial_condition"><br></br>
+  <label for="return_condition">Return Condition: </label><input id="return_condition" type="text" name="return_condition"><br></br>
+  <input id="submit" type="submit" value="Submit"><br></br>
+
+	<% @boats.each.with_index do |boat, idx| %>
+		<% if idx == 0 && boat.in_service %>
+			<input id="boat_selection" type="radio" name="boat_id" value="<%= boat.id %>" checked><%= "Boat Number: #{boat.number} - Boat Name: #{boat.name} - Boat Model: #{boat.model} - Boat Manufacturer: #{boat.manufacturer}." %></input><br></br>
+
+		<% elsif boat.in_service %>
+			<input id="boat_selection" type="radio" name="boat_id" value="<%= boat.id %>"><%= "Boat Number: #{boat.number} - Boat Name: #{boat.name} - Boat Model: #{boat.model} - Boat Manufacturer: #{boat.manufacturer}." %></input><br></br>
+		<% end %>
+	<% end %>
+</form>
+

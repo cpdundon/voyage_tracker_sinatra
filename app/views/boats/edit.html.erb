@@ -1,1 +1,19 @@
-<h1>Insert the form to edit an instance of your model here.</h1>
+<h1>Edit Boat <%= @boat.number %></h1>
+
+<% if @message %>
+	<h2><%= @message %></h2>
+<% end %>
+<form method="POST" action="/boats/<%= @boat.id %>">
+	<input id="hidden" type="hidden" name="_method" value="patch">
+	<label for="number">Boat Number: </label><input id="number" type="text" name="[boat]number" value="<%= @boat.number %>" required><br></br>
+	<label for="boat_name">Boat Name: </label><input id="name" type="text" name="[boat]name" value="<%= @boat.name %>" required><br></br>
+	<label for="manufacturer">Manufacturer: </label><input id="manufacturer" type="text" name="[boat]manufacturer" value="<%= @boat.manufacturer %>" required><br></br>
+	<label for="model">Model: </label><input id="model" type="text" name="[boat]model" value="<%= @boat.model %>"><br></br>
+	<label for="year">Year: </label><input id="year" type="text" name="[boat]year" value="<%= @boat.year %>"><br></br>
+<% if @boat.in_service %>
+	<label for="in_service">In Service: </label><input id="in_service" type="checkbox" name="[boat]in_service" checked><br></br>
+<% else %>
+	<label for="in_service">In Service: </label><input id="in_service" type="checkbox" name="[boat]in_service"><br></br>
+<% end %>
+	<input id="submit" type="submit" value="Submit">	
+</form>

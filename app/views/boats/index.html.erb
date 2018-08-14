@@ -1,1 +1,6 @@
-<h1>This is the Model's index page.</h1>
+<h1>These are the boats available to sail - click to edit:</h1>
+<% @boats.each do |boat| %>
+	<% yes_no = "Yes" if boat.in_service %>
+	<% yes_no = "No" if !boat.in_service %>
+	<p><a href="/boats/<%= boat.id %>/edit">Boat: <%= boat.number %></a> - Name: <%= boat.name %> - Manufacturer: <%= boat.manufacturer %> - Model: <%= boat.model %> - Year: <%= boat.year %> - In Service: <%= yes_no %></p>
+<% end %>

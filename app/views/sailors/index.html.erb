@@ -1,1 +1,10 @@
-<h1>This is the Model's index page.</h1>
+<h1>Welcome <%= @sailor.username %> - <%= @sailor.email %>. You can:</h1>
+<h2>Create / Modify / Delete a Voyage Or Create / Modify a Boat</h2>
+<Form method="POST" action="/sailors/<%= @sailor.id %>/menu">
+	<input type="radio" name="sailors_selection" value="create_voyage" checked>Create Voyage</input><br></br>
+	<input type="radio" name="sailors_selection" value="change_voyage">Change Voyage - View All Voyages</input><br></br>
+	<input type="radio" name="sailors_selection" value="create_boat">Create Boat</input><br></br>
+	<input type="radio" name="sailors_selection" value="change_boat">Change Boat - View All Boats</input><br></br>
+
+	<input type="submit" value="Submit">
+</Form>

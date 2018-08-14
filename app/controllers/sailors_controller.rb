@@ -1,9 +1,14 @@
 class SailorsController < ApplicationController
 
   get "/sailors" do
-    erb :"/sailors/index.html"
+    if logged_in?
+			@sailor = current_user
+			erb :"/sailors/index.html"
+		else
+			redirect "/"
+		end
   end
-	
+
 	get '/sailors/login' do
 		if logged_in?
 			session.clear
@@ -26,11 +31,11 @@ class SailorsController < ApplicationController
   end
 
 	post '/sailors/login' do
-		sailor = Sailor.find_by(:username => params[:username])
+		@sailor = Sailor.find_by(:username => params[:username])
 
-    if sailor && sailor.authenticate(params[:password])
-        session[:user_id] = sailor.id
-        redirect "/sailors"
+    if @sailor && @sailor.authenticate(params[:password])
+        session[:user_id] = @sailor.id
+				redirect to "/sailors"
     else
 				@message = "Log In Failed - Please Try Again"
         erb :'/sailors/login.html'
@@ -48,7 +53,7 @@ class SailorsController < ApplicationController
 			@sailor.skipper = true
 			@sailor.save
 			session[:user_id] = @sailor.id
-			redirect to '/sailors'
+			redirect to "/sailors"
 		end
   end
 
@@ -60,12 +65,47 @@ class SailorsController < ApplicationController
 		end
   end
 
+	post "/sailors/:id/menu" do
+		@sailor = Sailor.find_by_id(params[:id])
+		if logged_in? && @sailor && @sailor.id = current_user.id
+			choice_ = params[:sailors_selection]
+			case choice_
+				when	"create_voyage"
+					
+					redirect "/voyages/new"
+				when	"change_voyage"
+					
+					redirect "/voyages"
+				when	"create_boat"
+					
+					redirect "/boats/new"
+				when	"change_boat"
+					
+					redirect "/boats"
+				else
+					
+					redirect "/"
+			end
+		else
+			redirect "/"	
+		end
+	end
 
-  # GET: /sailors/5
+=begin
   get "/sailors/:id" do
-    erb :"/sailors/show.html"
+		@sailor = Sailor.find_by_id(params[:id])
+		
+		if logged_in? && @sailor
+			erb :"/sailors/show.html"
+		elsif logged_in?
+			redirect "/sailors"
+		else
+			redirect "/"
+		end
   end
+=end
 
+=begin
   # GET: /sailors/5/edit
   get "/sailors/:id/edit" do
     erb :"/sailors/edit.html"
@@ -80,4 +120,6 @@ class SailorsController < ApplicationController
   delete "/sailors/:id/delete" do
     redirect "/sailors"
   end
+=end
+
 end

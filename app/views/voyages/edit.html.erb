@@ -1,1 +1,43 @@
-<h1>Insert the form to edit an instance of your model here.</h1>
+<h1>Edit / Delete This Voyage</h1>
+<% if @message %>
+  <h2><%= @message %></h2>
+<% end %>
+
+<% if @voyage.start_time %>
+  <% start_time_ = @voyage.start_time.strftime("%Y-%m-%dT%H:%M") %>
+<% else %>
+  <% start_time_ = "" %>
+<% end %>
+
+<% if @voyage.end_time %>
+  <% end_time_ = @voyage.end_time.strftime("%Y-%m-%dT%H:%M") %>
+<% else %>
+  <% end_time_ = "" %>
+<% end %>
+
+<form method="POST" action="/voyages/<%= @voyage.id %>/delete">
+	<input id="hidden" type="hidden" name="_method" value="delete">
+	<input id="submit" type="submit" value="Delete">
+</form><br></br>
+
+<form method="POST" action="/voyages/<%= @voyage.id %>">
+	<input id="hidden" type="hidden" name="_method" value="patch">
+  
+	<label>Skipper: "<%= @voyage.skipper.username %>"</label><br></br>
+  <label for="crew">Crew: </label><input id="crew" type="text" name="[voyage]crew" value="<%= @voyage.crew %>"><br></br>
+  <label for="start_time">Start Time: </label><input id="start_time" type="datetime-local" name="[voyage]start_time" value="<%= start_time_ %>"><br></br>
+  <label for="end_time">End Time: </label><input id="end_time" type="datetime-local" name="[voyage]end_time" value="<%= end_time_ %>"><br></br>
+  <label for="initial_condition">Initial Condition: </label><input id="initial_condition" type="text" name="[voyage]initial_condition" value="<%= @voyage.initial_condition %>"><br></br>
+  <label for="return_condition">Return Condition: </label><input id="return_condition" type="text" name="[voyage]return_condition" value="<%= @voyage.return_condition %>"><br></br>
+
+  <% @boats.each.with_index do |boat, idx| %>
+    <% if boat.id == @voyage.boat.id %>
+      <input id="boat_selection" type="radio" name="[voyage]boat_id" value="<%= boat.id %>" checked><%= "Boat Number: #{boat.number} - Boat Name: #{boat.name} - Boat Model: #{boat.model} - Boat Manufacturer: #{boat.manufacturer}." %></input><br></br>
+
+    <% elsif boat.in_service %>
+      <input id="boat_selection" type="radio" name="[voyage]boat_id" value="<%= boat.id %>"><%= "Boat Number: #{boat.number} - Boat Name: #{boat.name} - Boat Model: #{boat.model} - Boat Manufacturer: #{boat.manufacturer}." %></input><br></br>
+    <% end %>
+  <% end %>
+
+  <input id="submit" type="submit" value="Submit"><br></br>
+</form>
